@@ -23,17 +23,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.mapsapp.ui.navigation.DraweItem
-import com.example.mapsapp.ui.navigation.InternalNavigationWrapped
+import com.example.mapsapp.ui.navigation.InternalNavigationWrapper
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrawerScreen(navMap: () -> Unit) {
+fun DrawerScreen() {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItemIndex by remember { mutableStateOf(0) }
     ModalNavigationDrawer(
+        gesturesEnabled = false,
         drawerContent = {
             ModalDrawerSheet {
                 DraweItem.entries.forEachIndexed { index, drawerItem ->
@@ -69,7 +70,7 @@ fun DrawerScreen(navMap: () -> Unit) {
                 )
             }
         ) { innerPadding ->
-            InternalNavigationWrapped(navController ,Modifier.padding(innerPadding))
+            InternalNavigationWrapper(navController ,Modifier.padding(innerPadding))
         }
 
     }

@@ -9,7 +9,7 @@ import com.example.mapsapp.ui.screens.MapScreen
 import com.example.mapsapp.ui.screens.MarkerListScreen
 
 @Composable
-fun InternalNavigationWrapped(navController: NavHostController, padding: Modifier) {
+fun InternalNavigationWrapper(navController: NavHostController, padding: Modifier) {
     NavHost(navController, Destination.Map){
         composable<Destination.Map> {
             MapScreen()

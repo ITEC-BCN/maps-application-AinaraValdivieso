@@ -20,7 +20,7 @@ fun MainNavigationWrapper(){
         }
 
         composable<Drawer> {
-            DrawerScreen {}
+            DrawerScreen()
         }
     }
 
