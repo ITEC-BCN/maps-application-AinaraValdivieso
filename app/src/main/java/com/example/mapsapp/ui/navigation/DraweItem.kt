@@ -13,6 +13,6 @@ enum class DraweItem(
 )
 {
     MAP(Icons.Default.LocationOn, "Map", Destination.Map),
-    LIST(Icons.Default.Edit, "List", Destination.List)
+    LIST(Icons.Default.Edit, "List", Destination.Lista)
 
 }

@@ -29,38 +29,9 @@ import com.example.mapsapp.viewmodels.SupabaseViewModel
 
 
 @Composable
-fun MarkerListScreen(){
+fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
-    val markerTitle: String by supabaseViewModel.markerTitle.observeAsState("")
-    val markerDescription: String by supabaseViewModel.markerDescription.observeAsState("")
-    val markerImage : String by supabaseViewModel.markerImage.observeAsState("")
     Column(Modifier.fillMaxSize()) {
-        Column(
-            Modifier.fillMaxWidth().weight(0.4f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text("Create new student", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-            TextField(
-                value = markerTitle,
-                onValueChange = { supabaseViewModel.editMarkerTitle(it) })
-            TextField(
-                value = markerDescription,
-                onValueChange = { supabaseViewModel.editMarkerDesc(it) })
-            TextField(
-                value = markerImage,
-                onValueChange = { supabaseViewModel.editMarkerImage(it) })
-            Button(onClick = {
-                supabaseViewModel.insertNewMarker(
-                    markerTitle,
-                    markerDescription,
-                    markerImage
-                )
-            }) {
-                Text("Insert")
-            }
-        }
-
         val markerList by supabaseViewModel.markersList.observeAsState(emptyList<Marker>())
         supabaseViewModel.getAllMarkers()
         LazyColumn(

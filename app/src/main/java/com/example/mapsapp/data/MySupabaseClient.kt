@@ -31,14 +31,16 @@ class MySupabaseClient() {
         }.decodeSingle<Marker>()
     }
 
-    suspend fun insertMarker(student: Marker){
-        client.from("Markers").insert(student)
+    suspend fun insertMarker(marker: Marker){
+        client.from("Markers").insert(marker)
     }
-    suspend fun updateMarker(id: String, title: String, description: String, image: String){
+    suspend fun updateMarker(id: String, title: String, description: String, image: String, lat: Double, lng: Double){
         client.from("Markers").update({
             set("title", title)
             set("mark", description)
             set("image", image)
+            set("lat", lat)
+            set("lng", lng)
         }) { filter { eq("id", id) } }
     }
     suspend fun deleteMarker(id: String){

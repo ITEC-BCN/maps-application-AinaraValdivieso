@@ -8,5 +8,7 @@ data class Marker(
     val id: Int? = null,
     val title : String,
     val description : String,
-    val image : String
+    val image : String,
+    val Lat : Double,
+    val Lng: Double
 )
