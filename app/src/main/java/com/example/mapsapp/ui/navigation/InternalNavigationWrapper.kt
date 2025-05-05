@@ -6,17 +6,27 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.mapsapp.ui.navigation.Destination.Lista
-import com.example.mapsapp.ui.navigation.Destination.MarkerDetail
+import com.example.mapsapp.ui.navigation.Destination.*
+import com.example.mapsapp.ui.screens.CreateMarkerScreen
 import com.example.mapsapp.ui.screens.DetailMarkerScreen
 import com.example.mapsapp.ui.screens.MapScreen
 import com.example.mapsapp.ui.screens.MarkerListScreen
+import kotlin.math.ln
 
 @Composable
 fun InternalNavigationWrapper(navController: NavHostController, padding: Modifier) {
-    NavHost(navController, Destination.Map){
+    NavHost(navController, Map){
         composable<Destination.Map> {
-            MapScreen()
+            MapScreen() { lat, lng ->
+                navController.navigate(MarkerCreation(
+                    latitud = lat,
+                    longitud = lng
+                ))
+            }
+        }
+        composable<MarkerCreation> { backStackEntry ->
+            val coords = backStackEntry.toRoute<MarkerCreation>()
+            CreateMarkerScreen(coords.latitud, coords.longitud) {}
         }
 
         composable<Lista> {

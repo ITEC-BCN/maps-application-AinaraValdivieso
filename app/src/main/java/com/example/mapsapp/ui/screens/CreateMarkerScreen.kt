@@ -18,11 +18,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mapsapp.viewmodels.SupabaseViewModel
 
 @Composable
-fun CreateMarkerScreen(){
+fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
     val markerTitle: String by supabaseViewModel.markerTitle.observeAsState("")
     val markerDescription: String by supabaseViewModel.markerDescription.observeAsState("")
     val markerImage : String by supabaseViewModel.markerImage.observeAsState("")
+    val markerLat : Double by supabaseViewModel.markerLat.observeAsState(0.0)
+    val markerLng : Double by supabaseViewModel.markerLng.observeAsState(0.0)
+
+
+
     Column(Modifier.fillMaxSize()) {
         Column(
             Modifier.fillMaxWidth().weight(0.4f),
@@ -44,7 +49,9 @@ fun CreateMarkerScreen(){
                 supabaseViewModel.insertNewMarker(
                     markerTitle,
                     markerDescription,
-                    markerImage
+                    markerImage,
+                    latitud,
+                    longitud
                 )
             }) {
                 Text("Insert")

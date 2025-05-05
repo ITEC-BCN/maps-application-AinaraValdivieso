@@ -32,7 +32,7 @@ class SupabaseViewModel : ViewModel() {
     val markersList = _markersList
 
     fun insertNewMarker(title : String, desc : String, image : String, lat: Double, lng: Double) {
-        val newMarker = Marker(title = title, description = desc, image = image, Lat = lat.toDouble(), Lng = lng.toDouble())
+        val newMarker = Marker(title = title, description = desc, image = image, lat = lat, lng = lng)
         CoroutineScope(Dispatchers.IO).launch {
             database.insertMarker(newMarker)
             database.getAllMarkers()

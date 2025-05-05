@@ -2,6 +2,7 @@ package com.example.mapsapp.ui.navigation
 
 import kotlinx.serialization.Serializable
 
+
 sealed class Destination {
 
     @Serializable
@@ -19,7 +20,7 @@ sealed class Destination {
     @Serializable
     data class MarkerDetail(val id: String)
 
-    //    @Serializable
-//    data class MarkerCreation(val coordenadas: LatLng)
+    @Serializable
+    data class MarkerCreation(val latitud : Double, val longitud: Double)
 
 }

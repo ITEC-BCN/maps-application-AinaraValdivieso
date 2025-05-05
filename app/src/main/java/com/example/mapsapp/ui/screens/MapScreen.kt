@@ -1,7 +1,6 @@
 package com.example.mapsapp.ui.screens
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -19,19 +18,28 @@ import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapScreen(modifier: Modifier = Modifier) {
+fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
     val markerList by supabaseViewModel.markersList.observeAsState(emptyList<Marker>())
 
-    Column(modifier.fillMaxSize()) {
+    Column(Modifier.fillMaxSize()) {
         //He cambiado la Longitud un poco para que quede más cercano al ITB
         val itb = LatLng(41.4534225, 2.1862701)
         val cameraPositionState = rememberCameraPositionState {
             position = CameraPosition.fromLatLngZoom(itb, 17f)
         }
         GoogleMap(
-            modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState){
+            Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState,
+            onMapClick = {
+                Log.d("MAP CLICKED", it.toString())
+            },
+            onMapLongClick = {
+                Log.d("MAP CLICKED LONG", it.toString())
+                navigateToCreate(it.latitude, it.longitude)
+            }
+        )
+        {
             Marker(
                 state = MarkerState(position = itb),
                 title = "ITB",
@@ -40,7 +48,6 @@ fun MapScreen(modifier: Modifier = Modifier) {
 
             markerList.forEach {
                 //Poner que por cada marker se vea en el mapa con el símbolo
-                //Cómo pongo que se creen (LongClick pero como)
                 val coords = LatLng(supabaseViewModel.markerLat.value!!, supabaseViewModel.markerLng.value!!)
                 Marker(
                     //Me falta añadir las coordenadas al supabase
