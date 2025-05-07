@@ -22,12 +22,6 @@ class SupabaseViewModel : ViewModel() {
     private val _markerImage = MutableLiveData<String>()
     val markerImage = _markerImage
 
-    private val _markerLat = MutableLiveData<Double>()
-    val markerLat = _markerLat
-
-    private val _markerLng = MutableLiveData<Double>()
-    val markerLng = _markerLng
-
     private val _markersList = MutableLiveData<List<Marker>>()
     val markersList = _markersList
 
@@ -36,6 +30,8 @@ class SupabaseViewModel : ViewModel() {
         CoroutineScope(Dispatchers.IO).launch {
             database.insertMarker(newMarker)
             database.getAllMarkers()
+            val markers = database.getAllMarkers()
+            _markersList.value = markers
         }
     }
 
@@ -48,6 +44,14 @@ class SupabaseViewModel : ViewModel() {
             }
         }
     }
+
+    fun deleteStudent(id: String){
+        CoroutineScope(Dispatchers.IO).launch {
+            database.deleteMarker(id)
+            getAllMarkers()
+        }
+    }
+
 
 
 

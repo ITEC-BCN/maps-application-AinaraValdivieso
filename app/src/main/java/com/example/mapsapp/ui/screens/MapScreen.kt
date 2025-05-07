@@ -22,6 +22,8 @@ fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
     val markerList by supabaseViewModel.markersList.observeAsState(emptyList<Marker>())
 
+    supabaseViewModel.getAllMarkers()
+
     Column(Modifier.fillMaxSize()) {
         //He cambiado la Longitud un poco para que quede más cercano al ITB
         val itb = LatLng(41.4534225, 2.1862701)
@@ -32,7 +34,8 @@ fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
             Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState,
             onMapClick = {
-                Log.d("MAP CLICKED", it.toString())
+                //Solo lo he hecho para comprobar que se me guarde la lista bien
+                Log.d("MARKER LIST", markerList.toString())
             },
             onMapLongClick = {
                 Log.d("MAP CLICKED LONG", it.toString())
@@ -46,11 +49,10 @@ fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
                 snippet = "Marker at ITB"
             )
 
-            markerList.forEach {
-                //Poner que por cada marker se vea en el mapa con el símbolo
-                val coords = LatLng(supabaseViewModel.markerLat.value!!, supabaseViewModel.markerLng.value!!)
+
+            markerList.forEach { marker ->
+                val coords = LatLng(marker.lat, marker.lng)
                 Marker(
-                    //Me falta añadir las coordenadas al supabase
                     state = MarkerState(position = coords),
                     title = supabaseViewModel.markerTitle.value,
                 )
