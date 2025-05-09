@@ -4,8 +4,10 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -40,12 +42,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mapsapp.viewmodels.SupabaseViewModel
 import java.io.File
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
-    val markerTitle: String by supabaseViewModel.markerTitle.observeAsState("")
-    val markerDescription: String by supabaseViewModel.markerDescription.observeAsState("")
-    val markerImage : String by supabaseViewModel.markerImage.observeAsState("")
+    val markerTitle by supabaseViewModel.markerTitle.observeAsState("")
+    val markerDesc by supabaseViewModel.markerDesc.observeAsState("")
+
     //Parte cámara
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
@@ -101,11 +104,11 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
                 value = markerTitle,
                 onValueChange = { supabaseViewModel.editMarkerTitle(it) })
             TextField(
-                value = markerDescription,
+                value = markerDesc,
                 onValueChange = { supabaseViewModel.editMarkerDesc(it) })
             //Aquí se pone la cámara
             Button(
-                onClick = { showDialog = true },
+                onClick = { showDialog = true  },
             ) {
                 Text("Abrir Cámara o Galería")
             }
@@ -122,16 +125,12 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
                     contentScale = ContentScale.Crop
                 )
             }
-            ////////////////////////////
 
-//            TextField(
-//                value = markerImage,
-//                onValueChange = { supabaseViewModel.editMarkerImage(it) })
             Button(onClick = {
                 supabaseViewModel.insertNewMarker(
                     markerTitle,
-                    markerDescription,
-                    markerImage,
+                    markerDesc,
+                    bitmap.value,
                     latitud,
                     longitud
                 )

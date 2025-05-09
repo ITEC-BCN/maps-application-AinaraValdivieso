@@ -1,5 +1,7 @@
 package com.example.mapsapp.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -13,6 +15,7 @@ import com.example.mapsapp.ui.screens.MapScreen
 import com.example.mapsapp.ui.screens.MarkerListScreen
 import kotlin.math.ln
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun InternalNavigationWrapper(navController: NavHostController, padding: Modifier) {
     NavHost(navController, Map){

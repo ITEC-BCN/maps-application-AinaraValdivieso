@@ -47,7 +47,7 @@ fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
                 val dissmissState = rememberSwipeToDismissBoxState(
                     confirmValueChange = {
                         if (it == SwipeToDismissBoxValue.EndToStart) {
-                            supabaseViewModel.deleteStudent(marker.id.toString())
+                            supabaseViewModel.deleteStudent(marker.id.toString(), marker.image)
                             true
                         } else { false }
                     }

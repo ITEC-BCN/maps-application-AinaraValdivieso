@@ -54,7 +54,7 @@ fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
                 val coords = LatLng(marker.lat, marker.lng)
                 Marker(
                     state = MarkerState(position = coords),
-                    title = supabaseViewModel.markerTitle.value,
+                    title = supabaseViewModel.selectedMarker.value?.title,
                 )
             }
         }
