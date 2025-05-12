@@ -13,7 +13,6 @@ import com.example.mapsapp.ui.screens.CreateMarkerScreen
 import com.example.mapsapp.ui.screens.DetailMarkerScreen
 import com.example.mapsapp.ui.screens.MapScreen
 import com.example.mapsapp.ui.screens.MarkerListScreen
-import kotlin.math.ln
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

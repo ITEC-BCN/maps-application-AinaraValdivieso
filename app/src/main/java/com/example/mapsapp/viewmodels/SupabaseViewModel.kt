@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mapsapp.MyApp
 import com.example.mapsapp.data.Marker
+import io.ktor.util.Digest
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,6 +28,12 @@ class SupabaseViewModel : ViewModel() {
 
     private val _markersList = MutableLiveData<List<Marker>>()
     val markersList = _markersList
+
+    private val _marker = MutableLiveData<Marker>()
+    val marker = _marker
+
+    private val _showLoading = MutableLiveData<Boolean>(true)
+    val showLoading = _showLoading
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertNewMarker(title: String, desc: String, image: Bitmap?, lat: Double, lng: Double) {
@@ -54,9 +61,20 @@ class SupabaseViewModel : ViewModel() {
 
     fun getAllMarkers() {
         CoroutineScope(Dispatchers.IO).launch {
-            val databaseStudents = database.getAllMarkers()
+            val databaseMarkers = database.getAllMarkers()
             withContext(Dispatchers.Main) {
-                _markersList.value = databaseStudents
+                _markersList.value = databaseMarkers
+                _showLoading.value = false
+            }
+        }
+    }
+
+    fun getMarker(id : String){
+        CoroutineScope(Dispatchers.IO).launch {
+            val marker = database.getMarker(id)
+            withContext(Dispatchers.Main) {
+                _marker.value = marker
+                _showLoading.value = false
             }
         }
     }
