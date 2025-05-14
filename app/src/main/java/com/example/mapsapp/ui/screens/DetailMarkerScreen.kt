@@ -120,7 +120,6 @@ fun DetailMarkerScreen(id: String, navigateBack: () -> Unit) {
                 TextField(
                     value = markerDesc,
                     onValueChange = { supabaseViewModel.editMarkerDesc(it) })
-                //Aquí se pone la cámara
                 Button(
                     onClick = { showDialog = true  },
                 ) {

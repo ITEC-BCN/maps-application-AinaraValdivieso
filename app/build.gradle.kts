@@ -88,6 +88,7 @@ dependencies {
     implementation("io.ktor:ktor-client-android:3.1.2")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("io.github.jan-tennert.supabase:storage-kt:$3.1.4")
+    implementation(libs.auth.kt)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
