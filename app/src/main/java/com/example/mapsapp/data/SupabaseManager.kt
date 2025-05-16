@@ -19,6 +19,7 @@ class SupabaseManager {
             autoLoadFromStorage = true
         }
     }
+
     suspend fun signUpWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
             supabase.auth.signUpWith(Email) {

@@ -8,6 +8,9 @@ import com.example.mapsapp.ui.screens.DrawerScreen
 import com.example.mapsapp.ui.screens.PermissionsScreen
 import com.example.mapsapp.ui.navigation.Destination.Drawer
 import com.example.mapsapp.ui.navigation.Destination.Permisions
+import com.example.mapsapp.ui.navigation.Destination.*
+import com.example.mapsapp.ui.screens.LogInScreen
+import com.example.mapsapp.ui.screens.RegisterScreen
 
 @Composable
 fun MainNavigationWrapper(){
@@ -15,6 +18,18 @@ fun MainNavigationWrapper(){
     NavHost(navController, Permisions){
         composable<Permisions> {
             PermissionsScreen(){
+                navController.navigate(LogIn)
+            }
+        }
+        composable<LogIn> {
+            LogInScreen(
+                navigateToHome = { navController.navigate(Drawer) },
+                navigateRegister = { navController.navigate(Register) }
+            )
+        }
+
+        composable<Register> {
+            RegisterScreen {
                 navController.navigate(Drawer)
             }
         }

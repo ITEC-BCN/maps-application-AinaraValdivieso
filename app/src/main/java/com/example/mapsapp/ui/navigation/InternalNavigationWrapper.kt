@@ -9,10 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.mapsapp.ui.navigation.Destination.*
-import com.example.mapsapp.ui.screens.CreateMarkerScreen
-import com.example.mapsapp.ui.screens.DetailMarkerScreen
-import com.example.mapsapp.ui.screens.MapScreen
-import com.example.mapsapp.ui.screens.MarkerListScreen
+import com.example.mapsapp.ui.screens.*
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

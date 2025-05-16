@@ -9,20 +9,23 @@ import com.example.mapsapp.utils.SharedPreferencesHelper
 import kotlinx.coroutines.launch
 
 class AuthViewModel(private val sharedPreferences: SharedPreferencesHelper) : ViewModel(){
-    init {
-        checkExistingSession()
-    }
+
     private val authManager = SupabaseApplication.supabase
     private val _email = MutableLiveData<String>()
     val email = _email
     private val _password = MutableLiveData<String>()
     val password = _password
+
     private val _authState = MutableLiveData<AuthState>()
     val authState = _authState
     private val _showError = MutableLiveData<Boolean>(false)
     val showError = _showError
     private val _user = MutableLiveData<String?>()
     val user = _user
+
+    init {
+        checkExistingSession()
+    }
 
     private fun refreshToken() {
         viewModelScope.launch {

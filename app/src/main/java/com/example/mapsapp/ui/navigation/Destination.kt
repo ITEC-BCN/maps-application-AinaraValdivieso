@@ -9,6 +9,12 @@ sealed class Destination {
     object Permisions : Destination()
 
     @Serializable
+    object LogIn : Destination()
+
+    @Serializable
+    object Register : Destination()
+
+    @Serializable
     object Drawer : Destination()
 
     @Serializable
