@@ -5,7 +5,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.mapsapp.MyApp
+import com.example.mapsapp.SupabaseApplication
 import com.example.mapsapp.data.Marker
 import io.ktor.util.Digest
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +15,7 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 
 class SupabaseViewModel : ViewModel() {
-    val database = MyApp.database
+    val database = SupabaseApplication.database
 
     private val _selectedMarker = MutableLiveData<Marker>()
     val selectedMarker = _selectedMarker
@@ -47,12 +47,12 @@ class SupabaseViewModel : ViewModel() {
     }
 
 
-    fun updateMarker(id: String, title : String, desc : String, image : Bitmap?, lat: Double, lng: Double){
+    fun updateMarker(id: String, title : String, desc : String, image : Bitmap?){
         val stream = ByteArrayOutputStream()
         image?.compress(Bitmap.CompressFormat.PNG, 0, stream)
         val imageName = _selectedMarker.value?.image?.removePrefix("https://aobflzinjcljzqpxpcxs.supabase.co/storage/v1/object/public/images/")
         CoroutineScope(Dispatchers.IO).launch {
-            database.updateMarker(id, title, desc, imageName.toString(), lat, lng, stream.toByteArray())
+            database.updateMarker(id, title, desc, imageName.toString(), stream.toByteArray())
         }
     }
 

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -49,7 +50,6 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
     val markerTitle by supabaseViewModel.markerTitle.observeAsState("")
     val markerDesc by supabaseViewModel.markerDesc.observeAsState("")
 
-    //Parte cámara
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -71,62 +71,89 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
+
     if (showDialog) {
-        AlertDialog(onDismissRequest = { showDialog = false }, title = { Text("Selecciona una opción") },
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Selecciona una opción") },
             text = { Text("¿Quieres tomar una foto o elegir una desde la galería?") },
-            confirmButton = {TextButton(onClick = {
-                showDialog = false
-                val uri = createImageUri(context)
-                imageUri.value = uri
-                takePictureLauncher.launch(uri!!)
-            }) { Text("Tomar Foto") }
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    val uri = createImageUri(context)
+                    imageUri.value = uri
+                    takePictureLauncher.launch(uri!!)
+                }) {
+                    Text("Tomar Foto")
+                }
             },
-            dismissButton = {TextButton(onClick = {
-                showDialog = false
-                pickImageLauncher.launch("image/*")
-            }) { Text("Elegir de Galería") }
+            dismissButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    pickImageLauncher.launch("image/*")
+                }) {
+                    Text("Elegir de Galería")
+                }
             }
         )
     }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = 150.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Text(
+            text = "Crear Nuevo Marcador",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
 
+        TextField(
+            value = markerTitle,
+            onValueChange = { supabaseViewModel.editMarkerTitle(it) },
+            label = { Text("Título") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp)
+        )
 
+        TextField(
+            value = markerDesc,
+            onValueChange = { supabaseViewModel.editMarkerDesc(it) },
+            label = { Text("Descripción") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 12.dp)
+        )
 
-
-    Column(Modifier.fillMaxSize()) {
-        Column(
-            Modifier.fillMaxWidth().weight(0.4f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Button(
+            onClick = { showDialog = true },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp)
         ) {
-            Text("Create new marker", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-            TextField(
-                value = markerTitle,
-                onValueChange = { supabaseViewModel.editMarkerTitle(it) })
-            TextField(
-                value = markerDesc,
-                onValueChange = { supabaseViewModel.editMarkerDesc(it) })
-            //Aquí se pone la cámara
-            Button(
-                onClick = { showDialog = true  },
-            ) {
-                Text("Abrir Cámara o Galería")
-            }
+            Text("Abrir Cámara o Galería")
+        }
 
-            Spacer(modifier = Modifier.height(24.dp))
+        bitmap.value?.let {
+            Image(
+                bitmap = it.asImageBitmap(),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .size(300.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .padding(vertical = 12.dp),
+                contentScale = ContentScale.Crop
+            )
+        }
 
-            bitmap.value?.let {
-                Image(
-                    bitmap = it.asImageBitmap(),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(300.dp)
-                        .clip(RoundedCornerShape(16.dp)),
-                    contentScale = ContentScale.Crop
-                )
-            }
-
-            Button(onClick = {
+        Button(
+            onClick = {
                 supabaseViewModel.insertNewMarker(
                     markerTitle,
                     markerDesc,
@@ -134,13 +161,16 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
                     latitud,
                     longitud
                 )
-            }) {
-                Text("Insert")
-            }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        ) {
+            Text("Guardar Marcador")
         }
-
     }
 }
+
 
 fun createImageUri(context: Context): Uri? {
     val file = File.createTempFile("temp_image_", ".jpg", context.cacheDir).apply {

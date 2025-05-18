@@ -1,5 +1,7 @@
 package com.example.mapsapp.ui.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,12 +14,13 @@ import com.example.mapsapp.ui.navigation.Destination.*
 import com.example.mapsapp.ui.screens.LogInScreen
 import com.example.mapsapp.ui.screens.RegisterScreen
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun MainNavigationWrapper(){
     val navController = rememberNavController()
-    NavHost(navController, Permisions){
+    NavHost(navController, Permisions) {
         composable<Permisions> {
-            PermissionsScreen(){
+            PermissionsScreen() {
                 navController.navigate(LogIn)
             }
         }
@@ -35,8 +38,12 @@ fun MainNavigationWrapper(){
         }
 
         composable<Drawer> {
-            DrawerScreen()
+            DrawerScreen() {
+                navController.navigate(LogIn) {
+                    popUpTo(0) { inclusive = true }
+                }
+            }
         }
-    }
 
+    }
 }

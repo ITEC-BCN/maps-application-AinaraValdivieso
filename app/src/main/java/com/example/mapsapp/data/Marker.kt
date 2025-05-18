@@ -10,5 +10,6 @@ data class Marker(
     var description : String,
     var image : String,
     val lat : Double,
-    val lng: Double
+    val lng: Double,
+    val user_id : String? = null
 )

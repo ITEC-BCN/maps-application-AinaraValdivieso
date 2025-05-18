@@ -28,7 +28,10 @@ fun LogInScreen(navigateToHome: () -> Unit, navigateRegister: () -> Unit) {
     val context = LocalContext.current
     val viewModel: AuthViewModel = viewModel(factory = AuthViewModelFactory(SharedPreferencesHelper(context)))
     val authState by viewModel.authState.observeAsState()
-    val showError by viewModel.showError.observeAsState(true)
+    val showError by viewModel.showError.observeAsState(false)
+    val email by viewModel.email.observeAsState("")
+    val password by viewModel.password.observeAsState("")
+
 
     if(authState == AuthState.Authenticated){
         navigateToHome()
@@ -52,8 +55,8 @@ fun LogInScreen(navigateToHome: () -> Unit, navigateRegister: () -> Unit) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TextField(value = "Pon tu usuario", onValueChange = {})
-        TextField(value = "Pon tu contraseña", onValueChange = {})
+        TextField(value = email, onValueChange = {viewModel.editEmail(it)})
+        TextField(value = password, onValueChange = {viewModel.editPassword(it)})
         Button(onClick = {viewModel.signIn()}) {
             Text("Log in")
         }

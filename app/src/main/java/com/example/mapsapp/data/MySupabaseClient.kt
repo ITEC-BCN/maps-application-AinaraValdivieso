@@ -45,14 +45,12 @@ class MySupabaseClient {
     suspend fun insertMarker(marker: Marker){
         client.from("Markers").insert(marker)
     }
-    suspend fun updateMarker(id: String, title: String, description: String, image: String, lat: Double, lng: Double, imageFile : ByteArray){
+    suspend fun updateMarker(id: String, title: String, description: String, image: String, imageFile : ByteArray){
         val imageName = storage.from("images").update(path = image, data = imageFile)
         client.from("Markers").update({
             set("title", title)
             set("description", description)
             set("image", buildImageUrl(imageFileName = imageName.path))
-            set("lat", lat)
-            set("lng", lng)
         }) { filter { eq("id", id) } }
     }
     suspend fun deleteMarker(id: String){
@@ -75,4 +73,6 @@ class MySupabaseClient {
 
 
     fun buildImageUrl(imageFileName: String) = "${this.supabaseUrl}/storage/v1/object/public/images/${imageFileName}"
+
+
 }

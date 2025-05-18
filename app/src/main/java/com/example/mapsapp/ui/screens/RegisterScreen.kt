@@ -26,7 +26,7 @@ fun RegisterScreen(navigateToHome: () -> Unit) {
     val viewModel: AuthViewModel =
         viewModel(factory = AuthViewModelFactory(SharedPreferencesHelper(context)))
     val authState by viewModel.authState.observeAsState()
-    val showError by viewModel.showError.observeAsState(true)
+    val showError by viewModel.showError.observeAsState(false)
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
 

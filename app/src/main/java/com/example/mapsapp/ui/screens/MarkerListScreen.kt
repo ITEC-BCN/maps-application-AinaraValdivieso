@@ -45,14 +45,16 @@ import com.example.mapsapp.viewmodels.SupabaseViewModel
 @Composable
 fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
-    Column(Modifier.fillMaxSize()) {
-        val markerList by supabaseViewModel.markersList.observeAsState(emptyList<Marker>())
-        supabaseViewModel.getAllMarkers()
+    val markerList by supabaseViewModel.markersList.observeAsState(emptyList<Marker>())
+    supabaseViewModel.getAllMarkers()
+
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(top = 120.dp, start = 16.dp, end = 16.dp)
+    ) {
         LazyColumn(
-            Modifier
-                .fillMaxWidth()
-                .weight(0.6f)
-                .padding(top = 100.dp)
+            Modifier.fillMaxWidth()
         ) {
             items(markerList) { marker ->
                 val dissmissState = rememberSwipeToDismissBoxState(
@@ -60,24 +62,32 @@ fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
                         if (it == SwipeToDismissBoxValue.EndToStart) {
                             supabaseViewModel.deleteStudent(marker.id.toString(), marker.image)
                             true
-                        } else { false }
+                        } else false
                     }
                 )
-                SwipeToDismissBox(state = dissmissState, backgroundContent = {
-                    Box(Modifier.fillMaxSize().background(Color.Red),contentAlignment = Alignment.BottomEnd) {
-                        Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                SwipeToDismissBox(
+                    state = dissmissState,
+                    backgroundContent = {
+                        Box(
+                            Modifier
+                                .fillMaxSize()
+                                .background(Color.Red),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = Color.White,
+                                modifier = Modifier.padding(end = 24.dp)
+                            )
+                        }
                     }
-                }) {
+                ) {
                     MarkerItem(marker) { navigateToDetail(marker.id.toString()) }
                 }
-                Spacer(modifier = Modifier.height(8.dp))
-
+                Spacer(modifier = Modifier.height(12.dp))
             }
-
-
-
         }
-
     }
 }
 
@@ -86,38 +96,38 @@ fun MarkerItem(marker: Marker, navigateToDetail: (String) -> Unit) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = (Color.LightGray))
-            .border(width = 2.dp, color = Color.Black)
+            .background(Color(0xFF2C2C2C))
             .clickable { navigateToDetail(marker.id.toString()) }
-            .padding(12.dp)
+            .padding(16.dp)
     ) {
         Row(
-            Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceEvenly
+            horizontalArrangement = Arrangement.Start
         ) {
             Image(
                 painter = rememberAsyncImagePainter(marker.image),
-                contentDescription = "Imagen de la película seleccionada",
+                contentDescription = "Imagen del marcador",
                 modifier = Modifier
-                    .size(110.dp)
-                    .clip(RoundedCornerShape(8.dp))
+                    .size(100.dp)
+                    .clip(RoundedCornerShape(12.dp))
             )
-            Column(modifier = Modifier.padding(start = 8.dp)) {
+            Column(
+                modifier = Modifier.padding(start = 16.dp)
+            ) {
                 Text(
                     text = marker.title,
-                    fontSize = 28.sp,
+                    fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = "Descripción: ${marker.description}",
-                    fontSize = 16.sp,
-                    color = Color.White.copy(alpha = 0.8f)
+                    text = marker.description,
+                    fontSize = 14.sp,
+                    color = Color.LightGray
                 )
             }
         }
     }
 }
-
 

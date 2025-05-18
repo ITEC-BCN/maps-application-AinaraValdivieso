@@ -48,15 +48,11 @@ import com.example.mapsapp.viewmodels.SupabaseViewModel
 @Composable
 fun DetailMarkerScreen(id: String, navigateBack: () -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
+    val marker by supabaseViewModel.marker.observeAsState()
     val markerTitle by supabaseViewModel.markerTitle.observeAsState("")
     val markerDesc by supabaseViewModel.markerDesc.observeAsState("")
-    val marker by supabaseViewModel.marker.observeAsState()
-    val showLoading : Boolean by supabaseViewModel.showLoading.observeAsState(true)
+    val showLoading: Boolean by supabaseViewModel.showLoading.observeAsState(true)
 
-
-
-
-    //Parte cámara
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -78,94 +74,125 @@ fun DetailMarkerScreen(id: String, navigateBack: () -> Unit) {
                 bitmap.value = BitmapFactory.decodeStream(stream)
             }
         }
+
     if (showDialog) {
-        AlertDialog(onDismissRequest = { showDialog = false }, title = { Text("Selecciona una opción") },
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Selecciona una opción") },
             text = { Text("¿Quieres tomar una foto o elegir una desde la galería?") },
-            confirmButton = {TextButton(onClick = {
-                showDialog = false
-                val uri = createImageUri(context)
-                imageUri.value = uri
-                takePictureLauncher.launch(uri!!)
-            }) { Text("Tomar Foto") }
+            confirmButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    val uri = createImageUri(context)
+                    imageUri.value = uri
+                    takePictureLauncher.launch(uri!!)
+                }) {
+                    Text("Tomar Foto")
+                }
             },
-            dismissButton = {TextButton(onClick = {
-                showDialog = false
-                pickImageLauncher.launch("image/*")
-            }) { Text("Elegir de Galería") }
+            dismissButton = {
+                TextButton(onClick = {
+                    showDialog = false
+                    pickImageLauncher.launch("image/*")
+                }) {
+                    Text("Elegir de Galería")
+                }
             }
         )
     }
-    if (showLoading){
+
+    if (showLoading) {
         supabaseViewModel.getMarker(id)
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            CircularProgressIndicator(
-                color = MaterialTheme.colorScheme.secondary
-            )
+            CircularProgressIndicator()
         }
-    } else{
-        Column(Modifier.fillMaxSize()) {
-            Column(
-                Modifier.fillMaxWidth().weight(0.4f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+    } else {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .padding(top = 150.dp, start = 24.dp, end = 24.dp, bottom = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Text(
+                text = "Editar Marcador",
+                fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Black,
+                modifier = Modifier.padding(bottom = 16.dp)
+            )
+
+            TextField(
+                value = markerTitle,
+                onValueChange = { supabaseViewModel.editMarkerTitle(it) },
+                label = { Text("Título") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+            )
+
+            TextField(
+                value = markerDesc,
+                onValueChange = { supabaseViewModel.editMarkerDesc(it) },
+                label = { Text("Descripción") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 12.dp)
+            )
+
+            Button(
+                onClick = { showDialog = true },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
             ) {
-                Text("Update marker ${marker!!.title}", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-                TextField(
-                    value = markerTitle,
-                    onValueChange = { supabaseViewModel.editMarkerTitle(it) })
-                TextField(
-                    value = markerDesc,
-                    onValueChange = { supabaseViewModel.editMarkerDesc(it) })
-                Button(
-                    onClick = { showDialog = true  },
-                ) {
-                    Text("Abrir Cámara o Galería")
-                }
+                Text("Abrir Cámara o Galería")
+            }
 
-                Spacer(modifier = Modifier.height(24.dp))
+            bitmap.value?.let {
+                Image(
+                    bitmap = it.asImageBitmap(),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .size(300.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .padding(vertical = 12.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
 
-                bitmap.value?.let {
-                    Image(
-                        bitmap = it.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(300.dp)
-                            .clip(RoundedCornerShape(16.dp)),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-
-                Button(onClick = {
+            Button(
+                onClick = {
                     supabaseViewModel.updateMarker(
                         id,
                         markerTitle,
                         markerDesc,
-                        bitmap.value,
-                        marker!!.lat,
-                        marker!!.lng
-
+                        bitmap.value
                     )
-
-                }) {
-                    Text("Update")
-                }
-                Button(
-                    onClick = navigateBack,
-                    modifier = Modifier.padding(top = 2.dp)
-                ) {
-                    Text("Tornar",
-                        modifier = Modifier.padding(5.dp))
-                }
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 8.dp)
+            ) {
+                Text("Guardar Cambios")
             }
 
+            TextButton(
+                onClick = navigateBack,
+                modifier = Modifier.padding(top = 8.dp)
+            ) {
+                Text("Volver")
+            }
         }
-
     }
 }
+
 
 /*
     val viewModel : SupabaseViewModel = viewModel()
