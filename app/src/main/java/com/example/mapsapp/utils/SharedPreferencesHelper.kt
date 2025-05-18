@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class SharedPreferencesHelper(context: Context) {
+    //Creación y gestión de los tokens
     private val sharedPreferences: SharedPreferences =
         context.getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
     fun saveAuthData(accessToken: String, refreshToken: String) {

@@ -53,6 +53,7 @@ fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
             .fillMaxSize()
             .padding(top = 120.dp, start = 16.dp, end = 16.dp)
     ) {
+        //Mostrar todos los marcadores uno a uno en una LazyColumn
         LazyColumn(
             Modifier.fillMaxWidth()
         ) {
@@ -60,11 +61,12 @@ fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
                 val dissmissState = rememberSwipeToDismissBoxState(
                     confirmValueChange = {
                         if (it == SwipeToDismissBoxValue.EndToStart) {
-                            supabaseViewModel.deleteStudent(marker.id.toString(), marker.image)
+                            supabaseViewModel.deleteMarker(marker.id.toString(), marker.image)
                             true
                         } else false
                     }
                 )
+                //Para que al deslizar se elimine el marcador
                 SwipeToDismissBox(
                     state = dissmissState,
                     backgroundContent = {
@@ -91,6 +93,7 @@ fun MarkerListScreen(navigateToDetail: (String) -> Unit) {
     }
 }
 
+//Diseño e información de un marcador
 @Composable
 fun MarkerItem(marker: Marker, navigateToDetail: (String) -> Unit) {
     Box(

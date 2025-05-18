@@ -28,12 +28,14 @@ class MySupabaseClient {
         }
         storage = client.storage
     }
-    //SQL operations
 
+    //SQL operations
+    //Seleccionar tot
     suspend fun getAllMarkers(): List<Marker> {
         return client.from("Markers").select().decodeList<Marker>()
     }
 
+    //Seleccionar solop uno por id
     suspend fun getMarker(id: String): Marker {
         return client.from("Markers").select {
             filter {
@@ -42,9 +44,12 @@ class MySupabaseClient {
         }.decodeSingle<Marker>()
     }
 
+    //Insertar marcador nuevo
     suspend fun insertMarker(marker: Marker){
         client.from("Markers").insert(marker)
     }
+
+    //Actualizar marcador
     suspend fun updateMarker(id: String, title: String, description: String, image: String, imageFile : ByteArray){
         val imageName = storage.from("images").update(path = image, data = imageFile)
         client.from("Markers").update({
@@ -53,11 +58,14 @@ class MySupabaseClient {
             set("image", buildImageUrl(imageFileName = imageName.path))
         }) { filter { eq("id", id) } }
     }
+
+    //Eliminar marcador
     suspend fun deleteMarker(id: String){
         client.from("Markers").delete{ filter { eq("id", id) } }
     }
 
 
+    //Subir imagen
     @RequiresApi(Build.VERSION_CODES.O)
     suspend fun uploadImage(imageFile: ByteArray): String {
         val fechaHoraActual = LocalDateTime.now()
@@ -66,12 +74,13 @@ class MySupabaseClient {
         return buildImageUrl(imageFileName = imageName.path)
     }
 
+    //Borrar imagen
     suspend fun deleteImage(imageName: String){
         val imgName = imageName.removePrefix("https://aobflzinjcljzqpxpcxs.supabase.co/storage/v1/object/public/images/")
         client.storage.from("images").delete(imgName)
     }
 
-
+    //Construir la ruta donde se guardará la imagen
     fun buildImageUrl(imageFileName: String) = "${this.supabaseUrl}/storage/v1/object/public/images/${imageFileName}"
 
 

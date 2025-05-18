@@ -32,10 +32,11 @@ fun LogInScreen(navigateToHome: () -> Unit, navigateRegister: () -> Unit) {
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
 
-
+    //si el usuario ya está tiene la sesión iniciada
     if(authState == AuthState.Authenticated){
         navigateToHome()
     }
+    //en caso de error
     else{
         if (showError) {
             val errorMessage = (authState as AuthState.Error).message
@@ -61,6 +62,7 @@ fun LogInScreen(navigateToHome: () -> Unit, navigateRegister: () -> Unit) {
             Text("Log in")
         }
         Row {
+            //para ir a la página de registro
             Text("¿Don't have an account?")
             Button(
                 onClick = navigateRegister,

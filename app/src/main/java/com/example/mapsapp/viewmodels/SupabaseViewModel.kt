@@ -35,6 +35,7 @@ class SupabaseViewModel : ViewModel() {
     private val _showLoading = MutableLiveData<Boolean>(true)
     val showLoading = _showLoading
 
+    //Inseartar marcador
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertNewMarker(title: String, desc: String, image: Bitmap?, lat: Double, lng: Double) {
         val stream = ByteArrayOutputStream()
@@ -46,7 +47,7 @@ class SupabaseViewModel : ViewModel() {
         }
     }
 
-
+    //Actualizar marcador
     fun updateMarker(id: String, title : String, desc : String, image : Bitmap?){
         val stream = ByteArrayOutputStream()
         image?.compress(Bitmap.CompressFormat.PNG, 0, stream)
@@ -58,7 +59,7 @@ class SupabaseViewModel : ViewModel() {
 
 
 
-
+    //Coger todos los marcadores
     fun getAllMarkers() {
         CoroutineScope(Dispatchers.IO).launch {
             val databaseMarkers = database.getAllMarkers()
@@ -69,6 +70,7 @@ class SupabaseViewModel : ViewModel() {
         }
     }
 
+    //Coger un único marcador
     fun getMarker(id : String){
         CoroutineScope(Dispatchers.IO).launch {
             val marker = database.getMarker(id)
@@ -79,7 +81,8 @@ class SupabaseViewModel : ViewModel() {
         }
     }
 
-    fun deleteStudent(id: String, image : String){
+    //Borrar un marcador
+    fun deleteMarker(id: String, image : String){
         CoroutineScope(Dispatchers.IO).launch {
             database.deleteImage(image)
             database.deleteMarker(id)
@@ -89,7 +92,7 @@ class SupabaseViewModel : ViewModel() {
 
 
 
-
+    //editar parámetros
     fun editMarkerTitle(title: String) {
         _markerTitle.value = title
     }

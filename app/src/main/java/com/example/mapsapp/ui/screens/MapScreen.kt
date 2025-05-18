@@ -49,7 +49,7 @@ fun MapScreen(navigateToCreate: (Double, Double) -> Unit) {
                 snippet = "Marker at ITB"
             )
 
-
+            //cargar todos los marcadores creados
             markerList.forEach { marker ->
                 val coords = LatLng(marker.lat, marker.lng)
                 Marker(

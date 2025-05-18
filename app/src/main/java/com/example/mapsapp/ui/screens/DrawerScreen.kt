@@ -29,16 +29,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.mapsapp.ui.navigation.DraweItem
 import com.example.mapsapp.ui.navigation.InternalNavigationWrapper
+import com.example.mapsapp.viewmodels.AuthViewModel
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DrawerScreen(logout: () -> Unit) {
+fun DrawerScreen(goToLogIn: () -> Unit) {
+    //para poder iniciar la nevegación interna
     val navController = rememberNavController()
+    val viewmodel = viewModel<AuthViewModel>()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedItemIndex by remember { mutableStateOf(0) }
@@ -68,7 +72,7 @@ fun DrawerScreen(logout: () -> Unit) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Bottom
                 ) {
-                    IconButton(onClick = { logout() }) {
+                    IconButton(onClick = {viewmodel.logout()}, ) { //falta el goToLogIn
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ExitToApp,
                             contentDescription = "Logout"
@@ -79,6 +83,7 @@ fun DrawerScreen(logout: () -> Unit) {
         },
         drawerState = drawerState
     ) {
+        //visión del menú (hamburguesa)
         Scaffold(
             topBar = {
                 TopAppBar(

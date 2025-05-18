@@ -11,10 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,11 +43,12 @@ import java.io.File
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) {
+fun CreateMarkerScreen(latitud: Double, longitud: Double, goBack: () -> Unit) {
     val supabaseViewModel = viewModel<SupabaseViewModel>()
     val markerTitle by supabaseViewModel.markerTitle.observeAsState("")
     val markerDesc by supabaseViewModel.markerDesc.observeAsState("")
 
+    //Parte cámara y galería
     val context = LocalContext.current
     val imageUri = remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -161,6 +160,8 @@ fun CreateMarkerScreen(latitud: Double, longitud: Double, function: () -> Unit) 
                     latitud,
                     longitud
                 )
+                goBack()
+
             },
             modifier = Modifier
                 .fillMaxWidth()

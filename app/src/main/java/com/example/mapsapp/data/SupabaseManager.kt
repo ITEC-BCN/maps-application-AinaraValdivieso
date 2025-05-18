@@ -20,6 +20,7 @@ class SupabaseManager {
         }
     }
 
+    //Registrar usuario a partir del email
     suspend fun signUpWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
             supabase.auth.signUpWith(Email) {
@@ -31,6 +32,8 @@ class SupabaseManager {
             return AuthState.Error(e.localizedMessage)
         }
     }
+
+    //Iniciar sesión
     suspend fun signInWithEmail(emailValue: String, passwordValue: String): AuthState {
         try {
             supabase.auth.signInWith(Email) {
@@ -43,11 +46,11 @@ class SupabaseManager {
         }
     }
 
+    //Recuperar la sessión cuando ya la has iniciado y no has cerrado sesión
     fun retrieveCurrentSession(): UserSession?{
         val session = supabase.auth.currentSessionOrNull()
         return session
     }
-
     fun refreshSession(): AuthState {
         try {
             supabase.auth.currentSessionOrNull()

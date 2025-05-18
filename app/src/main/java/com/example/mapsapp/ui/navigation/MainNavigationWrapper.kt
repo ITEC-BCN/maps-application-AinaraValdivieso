@@ -18,12 +18,15 @@ import com.example.mapsapp.ui.screens.RegisterScreen
 @Composable
 fun MainNavigationWrapper(){
     val navController = rememberNavController()
+    //La navegación comienza en la pantalla de permisos
     NavHost(navController, Permisions) {
         composable<Permisions> {
             PermissionsScreen() {
                 navController.navigate(LogIn)
             }
         }
+        //Dentro de iniciar sesión puede llevar al menú (has iniciado sesión correctamente)
+        //o a la pantalla de registro (debes de crear un usuario)
         composable<LogIn> {
             LogInScreen(
                 navigateToHome = { navController.navigate(Drawer) },
@@ -37,6 +40,7 @@ fun MainNavigationWrapper(){
             }
         }
 
+        //Se debería poder volver a la pantalla de login después de iniciar sesión
         composable<Drawer> {
             DrawerScreen() {
                 navController.navigate(LogIn) {

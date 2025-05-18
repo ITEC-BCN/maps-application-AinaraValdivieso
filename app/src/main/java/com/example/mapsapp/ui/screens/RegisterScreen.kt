@@ -30,9 +30,11 @@ fun RegisterScreen(navigateToHome: () -> Unit) {
     val email by viewModel.email.observeAsState("")
     val password by viewModel.password.observeAsState("")
 
+    //Si ya tiene cuenta no hace falta iniciar sesión de nuevo
     if (authState == AuthState.Authenticated) {
         navigateToHome()
     } else {
+        //En caso de error
         if (showError) {
             val errorMessage = (authState as AuthState.Error).message
             if (errorMessage.contains("invalid_credentials")) {
